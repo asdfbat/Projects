@@ -1,3 +1,4 @@
+import time
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import animation
@@ -62,17 +63,24 @@ if __name__ == "__main__":
     fig,ax = plt.subplots()
     time_index_span = 1000
     time_index_interval = 100
+    frames = (N - time_index_span)//time_index_interval
+
+    time1 = time.clock()
+
     def animate(i):
         current_index = i*time_index_interval
         update_data(current_index, time_index_span)
         ax.clear()
         ax.pcolormesh(data[:,current_index:current_index+time_index_span])
         ax.set_title('%03d'%(i))
+        if i == frames-1:
+            plt.clf()
+            plt.close()
         return ax
 
-    frames = (N - time_index_span)//time_index_interval
-    print(frames)
     interval = 1
-    ani = animation.FuncAnimation(fig,animate,frames,interval=interval,blit=False)
+    ani = animation.FuncAnimation(fig,animate,frames,interval=interval,blit=False,repeat=False)
 
     plt.show()
+    time2 = time.clock()
+    print(time2 - time1)
